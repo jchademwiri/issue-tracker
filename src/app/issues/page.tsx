@@ -1,4 +1,4 @@
 const Issues = () => {
-  return <div>Issues</div>;
+  return <div>Issues Page</div>;
 };
 export default Issues;
