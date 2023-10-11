@@ -1,4 +1,5 @@
 'use client';
+import { z } from 'zod';
 import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import axios from 'axios';
@@ -8,7 +9,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createIssueSchema } from '@/validationSchemas/createIssueSchema';
-import { z } from 'zod';
 import ErrorMessage from '@/components/ErrorMessage';
 import Spinner from '@/components/Spinner';
 
@@ -27,6 +27,17 @@ const NewIssue = () => {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      setIsSubmitting(true);
+      await axios.post('/api/issues', data);
+      router.push('/issues');
+    } catch (error) {
+      setIsSubmitting(false);
+      setError('An unexpected error ocured');
+    }
+  });
+
   return (
     <div className='max-w-xl'>
       {error && (
@@ -34,19 +45,7 @@ const NewIssue = () => {
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
       )}
-      <form
-        className=' space-y-3'
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            setIsSubmitting(true);
-            await axios.post('/api/issues', data);
-            router.push('/issues');
-          } catch (error) {
-            setIsSubmitting(false);
-            setError('An unexpected error ocured');
-          }
-        })}
-      >
+      <form className=' space-y-3' onSubmit={onSubmit}>
         <TextField.Root>
           <TextField.Input placeholder='Title' {...register('title')} />
         </TextField.Root>
