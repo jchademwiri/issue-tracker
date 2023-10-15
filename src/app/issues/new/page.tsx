@@ -11,8 +11,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createIssueSchema } from '@/validationSchemas/createIssueSchema';
 import ErrorMessage from '@/components/ErrorMessage';
 import Spinner from '@/components/Spinner';
+import { revalidatePath } from 'next/cache';
 
-type IssueForm = z.infer<typeof createIssueSchema>;
+export type IssueForm = z.infer<typeof createIssueSchema>;
 
 const NewIssue = () => {
   const router = useRouter();
@@ -32,6 +33,7 @@ const NewIssue = () => {
       setIsSubmitting(true);
       await axios.post('/api/issues', data);
       router.push('/issues');
+      revalidatePath('/issues', 'page');
     } catch (error) {
       setIsSubmitting(false);
       setError('An unexpected error ocured');
@@ -39,7 +41,7 @@ const NewIssue = () => {
   });
 
   return (
-    <div className='max-w-xl'>
+    <div className='max-w-xl mx-auto'>
       {error && (
         <Callout.Root color='red' className='mb-5'>
           <Callout.Text>{error}</Callout.Text>
