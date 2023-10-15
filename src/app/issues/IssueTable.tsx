@@ -10,7 +10,7 @@ type Issue = {
 
 const IssueTable = async () => {
   const issues = await getData();
-  console.log(issues);
+  // console.log(issues);
   return (
     <section>
       <div></div>

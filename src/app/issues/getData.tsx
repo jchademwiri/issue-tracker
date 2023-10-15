@@ -1,5 +1,8 @@
+const domain = 'https://issue-tracker-ebon-three.vercel.app';
+const localdomain = 'https://issue-tracker-ebon-three.vercel.app';
+
 export async function getData() {
-  const res = await fetch('http://localhost:3000/api/issues', {
+  const res = await fetch(`${domain}/api/issues`, {
     cache: 'no-store',
   });
 
